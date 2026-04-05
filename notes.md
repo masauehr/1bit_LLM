@@ -5,18 +5,24 @@
 - 標準 Ollama での Bonsai 8B 実行 → **失敗**
   - 原因: llama.cpp が `Q1_0_g128` フォーマット未対応
   - 解決策: PrismML フォーク版 llama-server を使用
+- `bonsai-demo/setup.sh` 実行 → MLX エラー発生（想定内）、llama-server は **[OK]**
+- `./scripts/run_llama.sh -p "こんにちは、自己紹介してください"` → **動作確認済み**
+  - 日本語での応答を確認
+  - VS Code + Continue から API 経由で接続済み
 
 ## パフォーマンス計測
 
-8GB MacBook（Apple Silicon）での比較計測結果（出典: techno-edge.net 2026/04/04）:
+8GB MacBook（Apple Silicon）での実測値:
 
-| モデル | パラメータ | サイズ | 速度 | Tool Calling |
-|--------|-----------|--------|------|-------------|
-| Bonsai 8B (PrismML) | 8.2B | 1.1GB | 21.1 tok/s | ✅ |
-| SwiftLM Qwen 2.5 3B | 3.1B | 1.7GB | 27.3 tok/s | ❌ |
-| Ollama Qwen 2.5 3B | 3.1B | 2.3GB | 23.1 tok/s | ✅ |
+| モデル | パラメータ | サイズ | 速度（Prompt） | 速度（Generation） | Tool Calling |
+|--------|-----------|--------|--------------|------------------|-------------|
+| **Bonsai 8B（自機実測）** | 8.2B | 1.1GB | **35.3 tok/s** | **27.1 tok/s** | ✅ |
+| Bonsai 8B（記事参考値） | 8.2B | 1.1GB | — | 21.1 tok/s | ✅ |
+| SwiftLM Qwen 2.5 3B | 3.1B | 1.7GB | — | 27.3 tok/s | ❌ |
+| Ollama Qwen 2.5 3B | 3.1B | 2.3GB | — | 23.1 tok/s | ✅ |
 
 - Bonsai 8B は 8.2B パラメータを 1.1GB に圧縮（圧縮率 **93%**）
+- 自機実測では記事参考値より高速（35.3 / 27.1 tok/s）
 
 ## 気づき・所感
 
