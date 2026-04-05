@@ -8,7 +8,20 @@
 - `bonsai-demo/setup.sh` 実行 → MLX エラー発生（想定内）、llama-server は **[OK]**
 - `./scripts/run_llama.sh -p "こんにちは、自己紹介してください"` → **動作確認済み**
   - 日本語での応答を確認
-  - VS Code + Continue から API 経由で接続済み
+- `./scripts/start_llama_server.sh` → **メモリ不足エラー**（コンテキスト65536トークン分で9216MB必要、空きは5460MB）
+  - 解決策: `-c 8192` でコンテキスト長を制限して起動
+  - `./scripts/start_llama_server.sh -c 8192` → **起動成功**
+- VS Code + Continue（`provider: openai`、`apiBase: http://localhost:8080/v1`）から接続 → **応答良好**
+
+## Bonsai 8B の得意・不得意
+
+| 操作 | 結果 | 備考 |
+|------|------|------|
+| コード生成・説明 | ✅ 良好 | 日本語応答も安定 |
+| URL を渡して「調べて」 | ❌ 誤動作 | `requests.get(url)` のコードを返す |
+| ネット参照が必要な質問 | ❌ 不可 | ローカルLLMはインターネット接続なし |
+
+**URL の内容を参照させたい場合**: 事前に記事本文を取得してプロンプトに貼り付ける必要がある。
 
 ## パフォーマンス計測
 
