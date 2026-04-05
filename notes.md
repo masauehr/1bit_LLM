@@ -12,6 +12,11 @@
   - 解決策: `-c 8192` でコンテキスト長を制限して起動
   - `./scripts/start_llama_server.sh -c 8192` → **起動成功**
 - VS Code + Continue（`provider: openai`、`apiBase: http://localhost:8080/v1`）から接続 → **応答良好**
+- `local_agent/scripts/agent.py` を `OLLAMA_BASE_URL=http://localhost:8080/v1` で起動 → **動作確認済み**
+- Continue での操作検証:
+  - `Ctrl+I`（インライン編集） → Ollama なしで動作 ✅
+  - `Ctrl+L`（チャット）→ Apply（ファイル書き込み） → Ollama が必要 ❌
+  - タブ補完（`deepseek-coder:1.3b`）→ Ollama が必要 → `config.yaml` でコメントアウト済み
 - `test_tool_calling.py` による Tool Calling → **動作確認済み**
   - モデルが `get_weather({'city': '東京'})` を正しく呼び出し
   - ツール結果をもとに自然な日本語で最終回答を生成
